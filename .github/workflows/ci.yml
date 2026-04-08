@@ -1,0 +1,41 @@
+name: Node.js CI
+
+# Controls when the workflow will run
+on:
+  # Triggers the workflow on push or pull request events but only for the main branch
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+# job is a set of steps that execute on the same runner. By default, jobs run
+# in parallel. You can use the needs keyword to run a job after another job
+# completes. Each job will run in a fresh instance of the virtual environment,
+# so you can be sure that there is no state shared between jobs.
+jobs:
+  build_and_test:
+    # The type of runner that the job will run on
+    runs-on: ubuntu-latest
+
+    # Steps represent a sequence of tasks that will be executed as part of the job
+    steps:
+      # Checks-out your repository under $GITHUB_WORKSPACE, so your job can access it
+      # it copy-pastes your repository to the runner, so that it can be used by the workflow
+      - uses: actions/checkout@v3
+      # Sets up a Node.js environment for use in actions by adding it to the PATH
+      -name: Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: '18'
+          # This will cache the node modules and speed up the workflow
+          # The cache-dependency-path is used to determine when the cache should be invalidated. 
+          # In this case, it will be invalidated whenever the package-lock.json file changes, which typically happens when you add or update dependencies.
+          cache: 'npm'
+          cache-dependency-path:'./backend/package-lock.json'
+      # Runs a set of commands using the runners shell
+      - name: Install dependencies
+        run: npm install --prefix backend
+      # for validating the code, we can use eslint
+      - name: Run Lint/Typescript checks
+      # this command will run the typescript compiler in the backend directory and check for any type errors without emitting any output files.(not generating any .js files)
+        run: cd backend && npx tsc --noEmit
+
