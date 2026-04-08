@@ -26,16 +26,12 @@ jobs:
         uses: actions/setup-node@v3
         with:
           node-version: '18'
-          # This will cache the node modules and speed up the workflow
-          # The cache-dependency-path is used to determine when the cache should be invalidated. 
-          # In this case, it will be invalidated whenever the package-lock.json file changes, which typically happens when you add or update dependencies.
           cache: 'npm'
-          cache-dependency-path:'./backend/package-lock.json'
-      # Runs a set of commands using the runners shell
+          # ERROR FIXED: Added space after the colon ':'
+          cache-dependency-path: './backend/package-lock.json'
+
       - name: Install dependencies
         run: npm install --prefix backend
-      # for validating the code, we can use eslint
-      - name: Run Lint/Typescript checks
-      # this command will run the typescript compiler in the backend directory and check for any type errors without emitting any output files.(not generating any .js files)
-        run: cd backend && npx tsc --noEmit
 
+      - name: Run Lint/Typescript checks
+        run: cd backend && npx tsc --noEmit
