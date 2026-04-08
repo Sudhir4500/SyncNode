@@ -22,7 +22,7 @@ jobs:
       # it copy-pastes your repository to the runner, so that it can be used by the workflow
       - uses: actions/checkout@v3
       # Sets up a Node.js environment for use in actions by adding it to the PATH
-      -name: Setup Node.js
+      - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: '18'
